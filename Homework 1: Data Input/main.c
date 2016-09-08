@@ -10,11 +10,12 @@
 
 int main(){
     
+    // Prompt user to enter data file
     printf("Enter the name of the .txt file you would like to import ");
     char input[1000];
     scanf("%s", input);
     
-    
+    // Will check if user input is valid
     if((fopen(input,"r"))!=NULL){
         
         printf("The file you have chosen was found: %s\n\n", input);
