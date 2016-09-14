@@ -8,14 +8,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
-/*
- struct student{
- char  name[20];
- int   studentNo;
- float   subjectA;
- float subjectB;
- };
- */
 
 
 void checkDiploma(FILE *fp){
@@ -50,10 +42,6 @@ void checkDiploma(FILE *fp){
 }
 
 
-int sort(){
-    return 0;
-    
-}
 
 void getData(FILE *fp){
     int c;
@@ -68,6 +56,13 @@ void getData(FILE *fp){
     int num[15];
     float subA[15];
     float subB[15];
+    
+    // create an array for sorting
+    char nameSort[15][10];
+    int numSort[15];
+    float subASort[15];
+    float subBSort[15];
+    
     
     float total;
     float average;
@@ -89,7 +84,15 @@ void getData(FILE *fp){
         num[i]=studno;
         subA[i]=testOne;
         subB[i]=testTwo;
+        
+        // sorting array
+        strcpy(nameSort[i],studname);
+        numSort[i]=studno;
+        subASort[i]=testOne;
+        subBSort[i]=testTwo;
         i++;
+        
+        
     }
     
     int j;
@@ -193,9 +196,34 @@ void getData(FILE *fp){
     
     printf("\n--------------------------------------------------------\n");
     
-    // sorting tool
+    // sorting tool based on the subject A
+   /*
+    char nameSort[15][10];
+    int numSort[15];
+    float subASort[15];
+    float subBSort[15];
+    */
     
+    printf("Program is sorting...\n");
+    // sorting will create a
+    int w, x, y, z = 7;
+    
+    for (w = 0; w < z; ++w){
+        for (x = w + 1; x < z; ++x){
+            if (subASort[w] > subASort[x]){
+                y =  subASort[w];
+                subASort[w] = subASort[x];
+                subASort[x] = y;
+            }
+        }
+    }
+    printf("Below are the subject A exam scores in accednding order. \n");
+    for (w = 0; w < z; ++w)
+        printf(" %.2f | ", subASort[w]);
+    printf("\n");
 }
+    
+
 
 int main(){
     
