@@ -10,7 +10,7 @@
 #include <math.h>
 
 
-void checkDiploma(FILE *fp){
+void checkDiploma(FILE *fp, FILE *fptr){
     
     int c;
     
@@ -21,7 +21,11 @@ void checkDiploma(FILE *fp){
     printf("\tBelow are the results of the students who \n"
            "\t\tgot a diploma and those who did not. \n");
     printf("--------------------------------------------------------\n");
-    
+    // prints to export file
+    fprintf(fptr,"\n--------------------------------------------------------\n");
+    fprintf(fptr,"\tBelow are the results of the students who \n"
+           "\t\tgot a diploma and those who did not. \n");
+    fprintf(fptr,"--------------------------------------------------------\n");
     
     char  studname[8];
     float  studno;
@@ -32,9 +36,14 @@ void checkDiploma(FILE *fp){
         
         if(testOne >= 50 && testTwo >=50){
             printf("%s: Student got a diploma\n", studname);
+            // prints to export file
+            fprintf(fptr,"%s: Student got a diploma\n", studname);
+
         }else{
             printf("%s: Student did not get a diploma\n",studname);
-            
+            // export file
+            fprintf(fptr,"%s: Student did not get a diploma\n",studname);
+
         }
         
     }
@@ -43,7 +52,7 @@ void checkDiploma(FILE *fp){
 
 
 
-void getData(FILE *fp){
+void getData(FILE *fp,FILE *fptr){
     int c;
     
     // initailizes the extracted data
@@ -76,6 +85,12 @@ void getData(FILE *fp){
     printf("\tBelow are the average exam scores along with");
     printf("\n\t the standard divation of the exams.");
     printf("\n--------------------------------------------------------\n");
+    // exports to file
+    fprintf(fptr,"--------------------------------------------------------\n");
+    fprintf(fptr,"\tBelow are the average exam scores along with");
+    fprintf(fptr,"\n\t the standard divation of the exams.");
+    fprintf(fptr,"\n--------------------------------------------------------\n");
+
     
     int i=0;
     while(fscanf(fp, "%s %d %f %f ", studname,&studno,&testOne,&testTwo) !=EOF){
@@ -140,8 +155,12 @@ void getData(FILE *fp){
     
     // print std Diviation to console.
     printf("The standard divation for subject A is : %.2f", stdDivSubA);
+    // pritns to export file
+    fprintf(fptr,"The standard divation for subject A is : %.2f", stdDivSubA);
     
     printf("\nThe average for test subject A is: %.2f", average);
+    // export to export file
+    fprintf(fptr,"\nThe average for test subject A is: %.2f", average);
     // find the std divition
     
     // printf("\n--------------------------------------------------------\n");
@@ -189,13 +208,20 @@ void getData(FILE *fp){
     
     // prints test subject B average.
     printf("\n\nThe average for test subject B is: %.2f", average2);
+    // pritns to export file
+    fprintf(fptr,"\n\nThe average for test subject B is: %.2f", average2);
     
     // print std Diviation to console.
     printf("\nThe standard divation for subject B is : %.2f", stdDivSubB);
+    // pritns to export
+    fprintf(fptr,"\nThe standard divation for subject B is : %.2f", stdDivSubB);
+
     
     
     printf("\n--------------------------------------------------------\n");
-    
+
+    fprintf(fptr,"\n--------------------------------------------------------\n");
+
     // sorting tool based on the subject A
    /*
     char nameSort[15][10];
@@ -205,6 +231,8 @@ void getData(FILE *fp){
     */
     
     printf("Program is sorting...\n");
+    //print to export file
+     fprintf(fptr,"\t\tProgram is sorting...\n");
     // sorting will create a
     int w, x, y, z = 7;
     
@@ -218,9 +246,15 @@ void getData(FILE *fp){
         }
     }
     printf("Below are the subject A exam scores in accednding order. \n");
+    fprintf(fptr,"Below are the subject A exam scores in accednding order. \n");
+    fprintf(fptr,"--------------------------------------------------------\n");
     for (w = 0; w < z; ++w)
         printf(" %.2f | ", subASort[w]);
     printf("\n");
+    // print to export
+    fprintf(fptr," %.2f | %.2f | %.2f | %.2f | %.2f | %.2f | %.2f | ", subASort[0],subASort[1],subASort[2],subASort[3], subASort[4],subASort[5],subASort[6]);
+    fprintf(fptr,"\n");
+
 }
     
 
@@ -236,6 +270,7 @@ int main(){
     if((fopen(input,"r"))!=NULL){
         printf("--------------------------------------------------------\n");
         printf("The file you have chosen was found: %s\n\n", input);
+        
     }else{
         printf("--------------------------------------------------------\n");
         printf("\t\t\tERROR: File was not found!\n\t\tDon't forget to add file extension\n");
@@ -243,25 +278,43 @@ int main(){
         printf("--------------------------------------------------------\n");
         main();
     }
-    
+    // will open the file the user wants to analyize
     FILE *fp;
+    FILE *fptr;
     int c;
+    
     
     fp=fopen(input,"r");
     c = fgetc(fp);
+    
+    // ask user for file naming
+    char output[15];
+    printf("This program will export your results onto a .txt file. Please name the file: ");
+    scanf("%s", output);
+    strcat(output, ".txt");
+    fptr = fopen(output, "w");
+    fprintf(fptr,"\t\t\t%s\t\t\t", output);
+    if(fptr == NULL){
+        printf("Error the file was not exported!");
+        exit(1);
+    }
+    
     
     while (c!=EOF){
         printf("%c",c);
         c = fgetc(fp);
     }
     fp=fopen(input,"r");
-    checkDiploma(fp);
+    checkDiploma(fp, fptr);
     
     
     fp=fopen(input,"r");
-    getData(fp);
+    getData(fp, fptr);
     
+    printf("--------------------------------------------------------\n");
+    printf("Your file was saved as %s in the current directory.\n", output);
     
+    fclose(fptr);
     
     return 0;
 }
